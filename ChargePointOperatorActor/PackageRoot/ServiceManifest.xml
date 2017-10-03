@@ -6,11 +6,11 @@
         <Extension Name="__GeneratedServiceType__" GeneratedId="16e6e0e9-b5a7-4bf4-a291-320d843a827f|Persisted">
           <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
             <DefaultService Name="ChargePointOperatorActorService" />
-            <ServiceEndpoint Name="ChargePointOperatorActorServiceEndpoint" />
             <ReplicatorEndpoint Name="ChargePointOperatorActorServiceReplicatorEndpoint" />
             <ReplicatorConfigSection Name="ChargePointOperatorActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="ChargePointOperatorActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="ChargePointOperatorActorServiceLocalStoreConfig" />
+            <ServiceEndpoint Name="ChargePointOperatorActorServiceEndpoint" />
           </GeneratedNames>
         </Extension>
       </Extensions>

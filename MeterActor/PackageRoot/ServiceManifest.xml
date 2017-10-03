@@ -6,11 +6,11 @@
         <Extension Name="__GeneratedServiceType__" GeneratedId="a7bb2217-13b6-4fcd-8c82-fe38d4980b95|Persisted">
           <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
             <DefaultService Name="MeterActorService" />
-            <ServiceEndpoint Name="MeterActorServiceEndpoint" />
             <ReplicatorEndpoint Name="MeterActorServiceReplicatorEndpoint" />
             <ReplicatorConfigSection Name="MeterActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="MeterActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="MeterActorServiceLocalStoreConfig" />
+            <ServiceEndpoint Name="MeterActorServiceEndpoint" />
           </GeneratedNames>
         </Extension>
       </Extensions>

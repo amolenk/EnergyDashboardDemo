@@ -33,6 +33,7 @@
     <ProjectReference Include="..\ChargePointActor\ChargePointActor.csproj" />
     <ProjectReference Include="..\ChargePointOperatorActor\ChargePointOperatorActor.csproj" />
     <ProjectReference Include="..\DashboardActor\DashboardActor.csproj" />
+    <ProjectReference Include="..\GatewayApi\GatewayApi.csproj" />
     <ProjectReference Include="..\MeterActor\MeterActor.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />

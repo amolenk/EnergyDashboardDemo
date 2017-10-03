@@ -6,11 +6,11 @@
         <Extension Name="__GeneratedServiceType__" GeneratedId="173ead8b-ebc3-47ab-b26d-1b92fbe58cff|Persisted">
           <GeneratedNames xmlns="http://schemas.microsoft.com/2015/03/fabact-no-schema">
             <DefaultService Name="DashboardActorService" />
-            <ServiceEndpoint Name="DashboardActorServiceEndpoint" />
             <ReplicatorEndpoint Name="DashboardActorServiceReplicatorEndpoint" />
             <ReplicatorConfigSection Name="DashboardActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="DashboardActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="DashboardActorServiceLocalStoreConfig" />
+            <ServiceEndpoint Name="DashboardActorServiceEndpoint" />
           </GeneratedNames>
         </Extension>
       </Extensions>

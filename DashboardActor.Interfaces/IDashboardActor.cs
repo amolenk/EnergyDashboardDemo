@@ -13,7 +13,7 @@ namespace DashboardActor.Interfaces
     /// </summary>
     public interface IDashboardActor : IActor
     {
-        Task RegisterAsync(Topology topology, CancellationToken cancellationToken);
+        Task RegisterAsync(Topology topology);
 
         Task UpdateValue();
     }

@@ -13,8 +13,8 @@ namespace ChargePointActor.Interfaces
     /// </summary>
     public interface IChargePointActor : IActor
     {
-        Task RegisterDashboardAsync(string dashboardId, CancellationToken cancellationToken);
+        Task RegisterDashboardAsync(string dashboardId);
 
-        Task ProcessChargeRecordAsync(ChargeRecord chargeRecord, CancellationToken cancellationToken);
+        Task ProcessChargeRecordAsync(ChargeRecord chargeRecord);
     }
 }

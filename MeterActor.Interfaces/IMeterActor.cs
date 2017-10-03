@@ -11,8 +11,8 @@ namespace MeterActor.Interfaces
     /// </summary>
     public interface IMeterActor : IActor
     {
-        Task RegisterDashboardAsync(string dashboardId, CancellationToken cancellationToken);
+        Task RegisterDashboardAsync(string dashboardId);
 
-        Task ProcessReadingAsync(object reading, CancellationToken cancellationToken);
+        Task ProcessReadingAsync(object reading);
     }
 }

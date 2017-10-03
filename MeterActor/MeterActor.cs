@@ -36,7 +36,12 @@ namespace MeterActor
             throw new NotImplementedException();
         }
 
-        public Task RegisterDashboardAsync(string dashboardId, CancellationToken cancellationToken)
+        public Task ProcessReadingAsync(object reading)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task RegisterDashboardAsync(string dashboardId)
         {
             throw new NotImplementedException();
         }

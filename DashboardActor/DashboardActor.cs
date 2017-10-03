@@ -25,35 +25,43 @@ namespace DashboardActor
         {
         }
 
-        public Task RegisterAsync(Topology topology, CancellationToken cancellationToken)
+        public Task RegisterAsync(Topology topology)
         {
             var dashboardId = Id.GetStringId();
 
             return Task.WhenAll(
-                RegisterTopologyWithChargePointsAsync(dashboardId, topology.ChargePointIds, cancellationToken),
-                RegisterTopologyWithMetersAsync(dashboardId, topology.MeterIds, cancellationToken));
+                RegisterTopologyWithChargePointsAsync(dashboardId, topology.ChargePointIds),
+                RegisterTopologyWithMetersAsync(dashboardId, topology.MeterIds));
         }
 
-        private static Task RegisterTopologyWithChargePointsAsync(string dashboardId, IEnumerable<string> chargePointIds, CancellationToken cancellationToken)
+        private static Task RegisterTopologyWithChargePointsAsync(string dashboardId, IEnumerable<string> chargePointIds)
         {
             var registerTasks = chargePointIds.Select(id =>
             {
                 var chargePointActor = ActorProxy.Create<IChargePointActor>(new ActorId(id));
-                return chargePointActor.RegisterDashboardAsync(dashboardId, cancellationToken);
+                return chargePointActor.RegisterDashboardAsync(dashboardId);
+            });  
+
+            return Task.WhenAll(registerTasks);
+        }
+
+        private static Task RegisterTopologyWithMetersAsync(string dashboardId, IEnumerable<string> meterIds)
+        {
+            var registerTasks = meterIds.Select(id =>
+            {
+                var meterActor = ActorProxy.Create<IMeterActor>(new ActorId(id));
+                return meterActor.RegisterDashboardAsync(dashboardId);
             });
 
             return Task.WhenAll(registerTasks);
         }
 
-        private static Task RegisterTopologyWithMetersAsync(string dashboardId, IEnumerable<string> meterIds, CancellationToken cancellationToken)
+        public Task UpdateDashboardAsync()
         {
-            var registerTasks = meterIds.Select(id =>
-            {
-                var meterActor = ActorProxy.Create<IMeterActor>(new ActorId(id));
-                return meterActor.RegisterDashboardAsync(dashboardId, cancellationToken);
-            });
+            // TODO Calculate some stuff.
+            // TODO Publish Actor events.
 
-            return Task.WhenAll(registerTasks);
+            throw new NotImplementedException();
         }
 
         public Task UpdateValue()
