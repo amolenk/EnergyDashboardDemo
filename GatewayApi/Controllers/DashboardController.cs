@@ -9,8 +9,8 @@ namespace GatewayApi.Controllers
     [Route("api/[controller]")]
     public class DashboardController : Controller
     {
-        // POST api/dashboard
-        [HttpPost]
+        // POST api/dashboard/[id]
+        [HttpPost("{id}")]
         public async Task Post(string id, [FromBody]Topology topology)
         {
             ActorId actorId = new ActorId(id);

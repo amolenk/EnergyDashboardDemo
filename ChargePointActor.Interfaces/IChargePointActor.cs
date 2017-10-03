@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 
 namespace ChargePointActor.Interfaces
@@ -13,8 +9,12 @@ namespace ChargePointActor.Interfaces
     /// </summary>
     public interface IChargePointActor : IActor
     {
-        Task RegisterDashboardAsync(string dashboardId);
+        Task RegisterDashboardAsync(string dashboardId, int position);
 
-        Task ProcessChargeRecordAsync(ChargeRecord chargeRecord);
+        Task NotifyChargeSessionStartedAsync();
+
+        Task NotifyChargeSessionEndedAsync();
+
+        Task NotifyChargeSessionUpdatedAsync(long sessionCharge);
     }
 }

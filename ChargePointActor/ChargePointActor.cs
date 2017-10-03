@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using ChargePointActor.Interfaces;
 using DashboardActor.Interfaces;
@@ -13,50 +12,85 @@ namespace ChargePointActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class ChargePointActor : Actor, IChargePointActor
     {
-        private const string DashboardIdsState = "dashboardIds";
+        private static readonly TimeSpan CHARGE_TIMEOUT = TimeSpan.FromMinutes(3);
 
         public ChargePointActor(ActorService actorService, ActorId actorId)
             : base(actorService, actorId)
         {
         }
 
-        /// <summary>
-        /// This method is called whenever an actor is activated.
-        /// An actor is activated the first time any of its methods are invoked.
-        /// </summary>
-        protected override Task OnActivateAsync()
+        public async Task RegisterDashboardAsync(string dashboardId, int position)
         {
-            ActorEventSource.Current.ActorMessage(this, "Actor activated.");
-
-            return StateManager.TryAddStateAsync(DashboardIdsState, new List<string>());
+            await StateManager.SetStateAsync($"Dashboard:{dashboardId}", position);
         }
 
-        public async Task RegisterDashboardAsync(string dashboardId)
+        public async Task NotifyChargeSessionStartedAsync()
         {
-            await StateManager.AddOrUpdateStateAsync(
-                DashboardIdsState,
-                new List<string> { dashboardId },
-                (id, list) =>
-                {
-                    if (!list.Contains(id))
-                    {
-                        list.Add(id);
-                    }
-                    return list;
-                });
+            // The chargePoint is clearly occupied when the chargeSessionStarted is received.
+            var occupied = true;
+
+            // The chargePoint is not yet charging when the chargeSessionStarted is received.
+            // We have to wait for a ChargeSessionUpdated.
+            var charging = false;
+
+            await UpdateDashboardsAsync(occupied, charging);
         }
 
-        public async Task ProcessChargeRecordAsync(ChargeRecord chargeRecord)
+        public async Task NotifyChargeSessionEndedAsync()
         {
+            // The chargePoint is no longer occupied, and thus not charging.
+            var charging = false;
+            var occupied = false;
+
+            // Clean up state.
+            await StateManager.TryRemoveStateAsync("LastSessionCharge");
+            await StateManager.TryRemoveStateAsync("LastSessionUpdate");
+
+            await UpdateDashboardsAsync(occupied, charging);
+        }
+
+        public async Task NotifyChargeSessionUpdatedAsync(long sessionCharge)
+        {
+            // The ChargePoint is occupied.
+            var occupied = true;
+
+            // Get and update the time of the last session update.
+            var lastUpdateTime = await StateManager.TryGetStateAsync<DateTime>("LastSessionUpdate");
+            await StateManager.SetStateAsync("LastSessionUpdate", DateTime.UtcNow);
+
+            // Get and update the charge value of the last session update.
+            var lastSessionCharge = await StateManager.TryGetStateAsync<long>("LastSessionCharge");
+            await StateManager.SetStateAsync("LastSessionCharge", sessionCharge);
+
+            // Calculate the time that has passed since the last update.
+            var timeSinceLastUpdate = lastUpdateTime.HasValue ? DateTime.UtcNow - lastUpdateTime.Value : TimeSpan.Zero;
+
+            // Calculate the charge progress.
+            var chargeProgress = sessionCharge - (lastSessionCharge.HasValue ? lastSessionCharge.Value : 0);
+
+            // We're still charging if there's been some progress.
+            // If no progress is detected, wait for CHARGE_TIMEOUT before concluding that charging has completed.
+            // Otherwise, we might get some 'blinking' charge indicators.
+            var charging = (chargeProgress > 0) || (timeSinceLastUpdate > CHARGE_TIMEOUT);
+
+            await UpdateDashboardsAsync(occupied, charging);
+        }
+
+        private async Task UpdateDashboardsAsync(bool occupied, bool charging)
+        {
+            var status = charging ? "charging" : (occupied ? "occupied" : "available");
+
             // Distribute charge record to all interested dashboards.
-            var dashboardIds = await StateManager.GetStateAsync<List<string>>(DashboardIdsState);
+            var tasks = (await StateManager.GetStateNamesAsync())
+                .Where(name => name.StartsWith("Dashboard:"))
+                .Select(async name =>
+                {
+                    var dashboardId = name.Substring("Dashboard:".Length);
+                    var position = await StateManager.GetStateAsync<int>(name);
 
-            var tasks = dashboardIds.Select(id =>
-            {
-                var dashboardActorId = new ActorId(id);
-                var dashboardActor = ActorProxy.Create<IDashboardActor>(dashboardActorId);
-                return dashboardActor.UpdateValue();
-            });
+                    var proxy = ActorProxy.Create<IDashboardActor>(new ActorId(dashboardId));
+                    return proxy.UpdateChargePointAsync(position, status);
+                });
 
             await Task.WhenAll(tasks);
         }

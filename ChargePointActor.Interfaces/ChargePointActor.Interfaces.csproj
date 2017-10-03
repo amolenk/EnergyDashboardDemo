@@ -86,7 +86,6 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChargeRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IChargePointActor.cs" />
   </ItemGroup>

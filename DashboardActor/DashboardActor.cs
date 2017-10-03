@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using ChargePointActor.Interfaces;
 using DashboardActor.Interfaces;
@@ -15,58 +13,93 @@ namespace DashboardActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class DashboardActor : Actor, IDashboardActor
     {
-        /// <summary>
-        /// Initializes a new instance of DashboardActor
-        /// </summary>
-        /// <param name="actorService">The Microsoft.ServiceFabric.Actors.Runtime.ActorService that will host this actor instance.</param>
-        /// <param name="actorId">The Microsoft.ServiceFabric.Actors.ActorId for this actor instance.</param>
         public DashboardActor(ActorService actorService, ActorId actorId)
             : base(actorService, actorId)
         {
         }
 
-        public Task RegisterAsync(Topology topology)
+        public async Task RegisterAsync(Topology topology)
         {
             var dashboardId = Id.GetStringId();
 
-            return Task.WhenAll(
-                RegisterTopologyWithChargePointsAsync(dashboardId, topology.ChargePointIds),
-                RegisterTopologyWithMetersAsync(dashboardId, topology.MeterIds));
+            await RegisterTopologyWithChargePointsAsync(dashboardId, topology);
+            //await RegisterTopologyWithMetersAsync(dashboardId, topology);
+
+            await PublishDashboardUpdatedEventAsync();
         }
 
-        private static Task RegisterTopologyWithChargePointsAsync(string dashboardId, IEnumerable<string> chargePointIds)
+        public async Task UpdateChargePointAsync(int position, string status)
         {
-            var registerTasks = chargePointIds.Select(id =>
+            var stateName = $"chargePoint:{position}";
+            await StateManager.SetStateAsync(stateName, status);
+
+            await PublishDashboardUpdatedEventAsync();
+        }
+
+        public async Task UpdateMeterStatus(MeterReadingType readingType, int reading)
+        {
+            var stateName = $"reading:{readingType}";
+            await StateManager.SetStateAsync(stateName, reading);
+
+            await PublishDashboardUpdatedEventAsync();
+        }
+
+        private async Task PublishDashboardUpdatedEventAsync()
+        {
+            var status = await GetDashboardStatusAsync();
+
+            var ev = GetEvent<IDashboardEvents>();
+            ev.DashboardUpdated(status);
+        }
+
+        private static Task RegisterTopologyWithChargePointsAsync(string dashboardId, Topology topology)
+        {
+            var registerTasks = topology.ChargePointIds.Select(chargePoint =>
             {
-                var chargePointActor = ActorProxy.Create<IChargePointActor>(new ActorId(id));
-                return chargePointActor.RegisterDashboardAsync(dashboardId);
+                var proxy = ActorProxy.Create<IChargePointActor>(new ActorId(chargePoint.Value));
+                return proxy.RegisterDashboardAsync(dashboardId, chargePoint.Key);
             });  
 
             return Task.WhenAll(registerTasks);
         }
 
-        private static Task RegisterTopologyWithMetersAsync(string dashboardId, IEnumerable<string> meterIds)
+        private static Task RegisterTopologyWithMetersAsync(string dashboardId, Topology topology)
         {
-            var registerTasks = meterIds.Select(id =>
+            return Task.WhenAll(
+                RegisterTopologyWithMeterAsync(dashboardId, topology.ProducedEnergyMeterId),
+                RegisterTopologyWithMeterAsync(dashboardId, topology.ConsumedEnergyMeterId),
+                RegisterTopologyWithMeterAsync(dashboardId, topology.ChargeEnergyMeterId));
+        }
+
+        private static Task RegisterTopologyWithMeterAsync(string dashboardId, string meterId)
+        {
+            var proxy = ActorProxy.Create<IMeterActor>(new ActorId(meterId));
+            return proxy.RegisterDashboardAsync(dashboardId);
+        }
+
+        private async Task<DashboardStatus> GetDashboardStatusAsync()
+        {
+            var producedEnergy = await StateManager.TryGetStateAsync<int>("reading:ProducedEnergy");
+            var consumedEnergy = await StateManager.TryGetStateAsync<int>("reading:ConsumedEnergy");
+            var chargeEnergy = await StateManager.TryGetStateAsync<int>("reading:ChargeEnergy");
+
+            var chargePoints = new List<ChargePointStatus>();
+            var chargePointPositions = (await StateManager.GetStateNamesAsync())
+                .Where(name => name.StartsWith("chargePoint:"))
+                .Select(name => int.Parse(name.Substring("chargePoint:".Length)));
+
+            foreach (var position in chargePointPositions)
             {
-                var meterActor = ActorProxy.Create<IMeterActor>(new ActorId(id));
-                return meterActor.RegisterDashboardAsync(dashboardId);
-            });
+                var status = await StateManager.GetStateAsync<string>($"chargePoint:{position}");
 
-            return Task.WhenAll(registerTasks);
-        }
+                chargePoints.Add(new ChargePointStatus(position, status));
+            }
 
-        public Task UpdateDashboardAsync()
-        {
-            // TODO Calculate some stuff.
-            // TODO Publish Actor events.
-
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateValue()
-        {
-            throw new NotImplementedException();
+            return new DashboardStatus(
+                producedEnergy.HasValue ? producedEnergy.Value : 0,
+                consumedEnergy.HasValue ? consumedEnergy.Value : 0,
+                chargeEnergy.HasValue ? chargeEnergy.Value : 0,
+                chargePoints);
         }
     }
 }

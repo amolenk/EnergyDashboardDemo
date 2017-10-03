@@ -8,27 +8,24 @@ namespace EnergyDashboard.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public HomeController()
         {
-            return View();
         }
 
-        public IActionResult About()
+        public ActionResult Index()
         {
-            ViewData["Message"] = "Your application description page.";
+            //var model = new IndexViewModel
+            //{
+            //    Rooms = (await _roomRepository.GetRoomsAsync())
+            //        .Select(r => new RoomViewModel
+            //        {
+            //            RoomId = r.RoomId,
+            //            RoomName = r.RoomName
+            //        })
+            //        .OrderBy(r => r.RoomName)
+            //        .ToList()
+            //};
 
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
-        {
             return View();
         }
     }

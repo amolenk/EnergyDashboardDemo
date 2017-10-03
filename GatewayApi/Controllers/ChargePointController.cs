@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ChargePointActor.Interfaces;
+using GatewayApi.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Client;
@@ -16,7 +17,20 @@ namespace GatewayApi.Controllers
             ActorId actorId = new ActorId(id);
             IChargePointActor actorProxy = ActorProxy.Create<IChargePointActor>(actorId);
 
-            await actorProxy.ProcessChargeRecordAsync(record);
+            switch (record.EventType)
+            {
+                case "sessionStarted":
+                    await actorProxy.NotifyChargeSessionStartedAsync();
+                    break;
+
+                case "sessionEnded":
+                    await actorProxy.NotifyChargeSessionEndedAsync();
+                    break;
+
+                case "sessionUpdated":
+                    await actorProxy.NotifyChargeSessionUpdatedAsync(long.Parse(record.EventPayload));
+                    break;
+            }
         }
     }
 }

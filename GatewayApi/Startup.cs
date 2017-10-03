@@ -39,6 +39,8 @@ namespace GatewayApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseCors(builder => builder.WithOrigins("http://localhost:21562/"));
+
             app.UseSignalR2();
             app.UseMvc();
         }

@@ -19,8 +19,10 @@ namespace ChargePointOperatorActor
     ///  - None: State is kept in memory only and not replicated.
     /// </remarks>
     [StatePersistence(StatePersistence.Persisted)]
-    internal class ChargePointOperatorActor : Actor, IChargePointOperatorActor
+    internal class ChargePointOperatorActor : Actor, IChargePointOperatorActor, IRemindable
     {
+        private const string UpdateReminder = "DashboardUpdated";
+
         /// <summary>
         /// Initializes a new instance of ChargePointOperatorActor
         /// </summary>
@@ -31,41 +33,26 @@ namespace ChargePointOperatorActor
         {
         }
 
-        /// <summary>
-        /// This method is called whenever an actor is activated.
-        /// An actor is activated the first time any of its methods are invoked.
-        /// </summary>
         protected override Task OnActivateAsync()
         {
-            ActorEventSource.Current.ActorMessage(this, "Actor activated.");
+            var reminderRegistration = RegisterReminderAsync(
+                    UpdateReminder,
+                    new byte[0],
+                    TimeSpan.Zero,
+                    TimeSpan.FromSeconds(3));
 
-            // The StateManager is this actor's private state store.
-            // Data stored in the StateManager will be replicated for high-availability for actors that use volatile or persisted state storage.
-            // Any serializable object can be saved in the StateManager.
-            // For more information, see https://aka.ms/servicefabricactorsstateserialization
-
-            return this.StateManager.TryAddStateAsync("count", 0);
+            return base.OnActivateAsync();
         }
 
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> IChargePointOperatorActor.GetCountAsync(CancellationToken cancellationToken)
+        public Task ReceiveReminderAsync(string reminderName, byte[] state, TimeSpan dueTime, TimeSpan period)
         {
-            return this.StateManager.GetStateAsync<int>("count", cancellationToken);
-        }
+            if (reminderName.Equals(UpdateReminder))
+            {
+                //var ev = GetEvent<IDashboardEvents>();
+                //ev.DashboardUpdated(DateTime.UtcNow.ToString());
+            }
 
-        /// <summary>
-        /// TODO: Replace with your own actor method.
-        /// </summary>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        Task IChargePointOperatorActor.SetCountAsync(int count, CancellationToken cancellationToken)
-        {
-            // Requests are not guaranteed to be processed in order nor at most once.
-            // The update function here verifies that the incoming count is greater than the current count to preserve order.
-            return this.StateManager.AddOrUpdateStateAsync("count", count, (key, value) => count > value ? count : value, cancellationToken);
+            return Task.FromResult(true);
         }
     }
 }

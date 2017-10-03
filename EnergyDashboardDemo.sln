@@ -23,7 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChargePointOperatorActor.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatewayApi", "GatewayApi\GatewayApi.csproj", "{240361BC-DF0E-466D-8345-6A0A5C6DC0E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnergyDashboard", "EnergyDashboard\EnergyDashboard.csproj", "{3381D3AB-DFE7-4A1F-903E-FB742631B645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyDashboard", "EnergyDashboard\EnergyDashboard.csproj", "{3381D3AB-DFE7-4A1F-903E-FB742631B645}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadGenerator", "LoadGenerator\LoadGenerator.csproj", "{FC388263-B365-40FD-B6F9-06BFFC4F2F33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,14 @@ Global
 		{3381D3AB-DFE7-4A1F-903E-FB742631B645}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3381D3AB-DFE7-4A1F-903E-FB742631B645}.Release|x64.ActiveCfg = Release|Any CPU
 		{3381D3AB-DFE7-4A1F-903E-FB742631B645}.Release|x64.Build.0 = Release|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Debug|x64.Build.0 = Debug|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|x64.ActiveCfg = Release|Any CPU
+		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

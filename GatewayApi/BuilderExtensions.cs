@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Owin.Builder;
+using Microsoft.Owin.Cors;
 using Owin;
 
 namespace GatewayApi
@@ -32,7 +34,12 @@ namespace GatewayApi
 
         public static void UseSignalR2(this IApplicationBuilder app)
         {
-            app.UseAppBuilder(appBuilder => appBuilder.MapSignalR());
+            app.UseAppBuilder(appBuilder => appBuilder.Map("/signalr", map =>
+            {
+                map.UseCors(CorsOptions.AllowAll);
+                var hubConfiguration = new HubConfiguration();
+                map.RunSignalR(hubConfiguration);
+            }));
         }
     }
 }
