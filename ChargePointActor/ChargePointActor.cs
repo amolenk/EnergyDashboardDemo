@@ -12,8 +12,6 @@ namespace ChargePointActor
     [StatePersistence(StatePersistence.Persisted)]
     internal class ChargePointActor : Actor, IChargePointActor
     {
-        private static readonly TimeSpan CHARGE_TIMEOUT = TimeSpan.FromMinutes(3);
-
         public ChargePointActor(ActorService actorService, ActorId actorId)
             : base(actorService, actorId)
         {
@@ -69,9 +67,7 @@ namespace ChargePointActor
             var chargeProgress = sessionCharge - (lastSessionCharge.HasValue ? lastSessionCharge.Value : 0);
 
             // We're still charging if there's been some progress.
-            // If no progress is detected, wait for CHARGE_TIMEOUT before concluding that charging has completed.
-            // Otherwise, we might get some 'blinking' charge indicators.
-            var charging = (chargeProgress > 0) || (timeSinceLastUpdate > CHARGE_TIMEOUT);
+            var charging = (chargeProgress > 0);
 
             await UpdateDashboardsAsync(occupied, charging);
         }

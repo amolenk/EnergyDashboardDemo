@@ -95,7 +95,6 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DashboardRef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ChargePointActor.cs" />
     <Compile Include="Program.cs" />

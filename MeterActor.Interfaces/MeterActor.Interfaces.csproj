@@ -86,7 +86,6 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MeterReading.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IMeterActor.cs" />
   </ItemGroup>
