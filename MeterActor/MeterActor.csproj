@@ -107,6 +107,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DashboardActor.Interfaces\DashboardActor.Interfaces.csproj">
+      <Project>{b388c236-c517-454a-8504-1cbb7a572e48}</Project>
+      <Name>DashboardActor.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MeterActor.Interfaces\MeterActor.Interfaces.csproj">
       <Project>{7043B683-5E62-48E7-867C-778670EEB7FF}</Project>
       <Name>MeterActor.Interfaces</Name>

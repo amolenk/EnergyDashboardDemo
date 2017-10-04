@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnergyDashboard", "EnergyDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadGenerator", "LoadGenerator\LoadGenerator.csproj", "{FC388263-B365-40FD-B6F9-06BFFC4F2F33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashboardUI", "DashboardUI\DashboardUI.csproj", "{10D8F01C-5547-4C2D-B89D-FA20374141C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServiceFabric", "ServiceFabric", "{F7314ECB-B5E9-429D-82FF-B6713A49F52F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,8 +119,19 @@ Global
 		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|x64.ActiveCfg = Release|Any CPU
 		{FC388263-B365-40FD-B6F9-06BFFC4F2F33}.Release|x64.Build.0 = Release|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{10D8F01C-5547-4C2D-B89D-FA20374141C7}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6422B161-2F84-47F6-BC5E-D01C441077B8} = {F7314ECB-B5E9-429D-82FF-B6713A49F52F}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DashboardActor.Interfaces;
 using Microsoft.ServiceFabric.Actors;
 
 namespace MeterActor.Interfaces
@@ -11,8 +12,8 @@ namespace MeterActor.Interfaces
     /// </summary>
     public interface IMeterActor : IActor
     {
-        Task RegisterDashboardAsync(string dashboardId);
+        Task RegisterDashboardAsync(string dashboardId, MeterReadingType meterReadingType);
 
-        Task ProcessReadingAsync(object reading);
+        Task ProcessReadingAsync(int reading);
     }
 }

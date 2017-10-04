@@ -11,7 +11,7 @@ namespace GatewayApi.Controllers
     {
         // PUT api/meter/building
         [HttpPut("{id}")]
-        public async Task Put(string id, [FromBody]MeterReading reading)
+        public async Task Put(string id, [FromBody]int reading)
         {
             ActorId actorId = new ActorId(id);
             IMeterActor actorProxy = ActorProxy.Create<IMeterActor>(actorId);

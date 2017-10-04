@@ -23,7 +23,7 @@ namespace DashboardActor
             var dashboardId = Id.GetStringId();
 
             await RegisterTopologyWithChargePointsAsync(dashboardId, topology);
-            //await RegisterTopologyWithMetersAsync(dashboardId, topology);
+            await RegisterTopologyWithMetersAsync(dashboardId, topology);
 
             await PublishDashboardUpdatedEventAsync();
         }
@@ -66,15 +66,15 @@ namespace DashboardActor
         private static Task RegisterTopologyWithMetersAsync(string dashboardId, Topology topology)
         {
             return Task.WhenAll(
-                RegisterTopologyWithMeterAsync(dashboardId, topology.ProducedEnergyMeterId),
-                RegisterTopologyWithMeterAsync(dashboardId, topology.ConsumedEnergyMeterId),
-                RegisterTopologyWithMeterAsync(dashboardId, topology.ChargeEnergyMeterId));
+                RegisterTopologyWithMeterAsync(dashboardId, MeterReadingType.ProducedEnergy, topology.ProducedEnergyMeterId),
+                RegisterTopologyWithMeterAsync(dashboardId, MeterReadingType.ConsumedEnergy, topology.ConsumedEnergyMeterId),
+                RegisterTopologyWithMeterAsync(dashboardId, MeterReadingType.ChargeEnergy, topology.ChargeEnergyMeterId));
         }
 
-        private static Task RegisterTopologyWithMeterAsync(string dashboardId, string meterId)
+        private static Task RegisterTopologyWithMeterAsync(string dashboardId, MeterReadingType meterReadingType, string meterId)
         {
             var proxy = ActorProxy.Create<IMeterActor>(new ActorId(meterId));
-            return proxy.RegisterDashboardAsync(dashboardId);
+            return proxy.RegisterDashboardAsync(dashboardId, meterReadingType);
         }
 
         private async Task<DashboardStatus> GetDashboardStatusAsync()
