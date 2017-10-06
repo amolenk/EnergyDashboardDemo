@@ -95,8 +95,9 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChargePointOperatorUsingReminderActor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ChargePointOperatorActor.cs" />
+    <Compile Include="ChargePointOperatorUsingTimerActor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ActorEventSource.cs" />
   </ItemGroup>

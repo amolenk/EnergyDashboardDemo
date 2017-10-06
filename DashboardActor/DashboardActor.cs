@@ -18,6 +18,16 @@ namespace DashboardActor
         {
         }
 
+        protected override Task OnActivateAsync()
+        {
+            return base.OnActivateAsync();
+        }
+
+        protected override Task OnDeactivateAsync()
+        {
+            return base.OnDeactivateAsync();
+        }
+
         public async Task RegisterAsync(Topology topology)
         {
             var dashboardId = Id.GetStringId();
