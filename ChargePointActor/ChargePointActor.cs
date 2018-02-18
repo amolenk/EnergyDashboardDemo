@@ -52,16 +52,9 @@ namespace ChargePointActor
             // The ChargePoint is occupied.
             var occupied = true;
 
-            // Get and update the time of the last session update.
-            var lastUpdateTime = await StateManager.TryGetStateAsync<DateTime>("LastSessionUpdate");
-            await StateManager.SetStateAsync("LastSessionUpdate", DateTime.UtcNow);
-
             // Get and update the charge value of the last session update.
             var lastSessionCharge = await StateManager.TryGetStateAsync<long>("LastSessionCharge");
             await StateManager.SetStateAsync("LastSessionCharge", sessionCharge);
-
-            // Calculate the time that has passed since the last update.
-            var timeSinceLastUpdate = lastUpdateTime.HasValue ? DateTime.UtcNow - lastUpdateTime.Value : TimeSpan.Zero;
 
             // Calculate the charge progress.
             var chargeProgress = sessionCharge - (lastSessionCharge.HasValue ? lastSessionCharge.Value : 0);

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
-    <ProjectGuid>{9436464D-8037-4EF0-B266-58E7B700A806}</ProjectGuid>
+    <ProjectGuid>{3C63A0F9-E296-4348-97CE-41B5980B47AB}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DashboardActor</RootNamespace>
-    <AssemblyName>DashboardActor</AssemblyName>
+    <RootNamespace>MyAwesomeNewActor</RootNamespace>
+    <AssemblyName>MyAwesomeNewActor</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DashboardActor.cs" />
+    <Compile Include="MyAwesomeNewActor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ActorEventSource.cs" />
   </ItemGroup>
@@ -109,17 +109,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChargePointActor.Interfaces\ChargePointActor.Interfaces.csproj">
-      <Project>{557d95fa-8b01-400e-91c3-0eb6cfa8c74d}</Project>
-      <Name>ChargePointActor.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DashboardActor.Interfaces\DashboardActor.Interfaces.csproj">
-      <Project>{B388C236-C517-454A-8504-1CBB7A572E48}</Project>
-      <Name>DashboardActor.Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MeterActor.Interfaces\MeterActor.Interfaces.csproj">
-      <Project>{7043b683-5e62-48e7-867c-778670eeb7ff}</Project>
-      <Name>MeterActor.Interfaces</Name>
+    <ProjectReference Include="..\MyAwesomeNewActor.Interfaces\MyAwesomeNewActor.Interfaces.csproj">
+      <Project>{AB9B1594-5CA5-4581-995C-DB209E42C1C6}</Project>
+      <Name>MyAwesomeNewActor.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

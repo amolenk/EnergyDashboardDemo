@@ -10,8 +10,6 @@ namespace DashboardUI
     {
         static readonly Random random = new Random();
 
-        static int chargeEnergy = 0;
-
         static void Main(string[] args)
         {
             MainAsync().GetAwaiter().GetResult();
@@ -44,18 +42,20 @@ namespace DashboardUI
             var apiProxy = new ApiProxy();
             await apiProxy.RegisterTopologyAsync();
 
-            var simulationTasks = Enumerable.Range(1, 10)
-                .Select(i => SimulateChargePointUsage(i, "chargePoint" + i, apiProxy))
-                .ToList();
+            //var simulationTasks = Enumerable.Range(1, 10)
+            //    .Select(i => SimulateChargePointUsage(i, "chargePoint" + i, apiProxy))
+            //    .ToList();
 
-            var timer = new Timer(2000);
-            timer.Elapsed += (s, e) =>
-            {
-                Task.WhenAll(
-                    apiProxy.UpdateMeterReadingAsync("meter1", random.Next(200, 300))
-                    ).GetAwaiter().GetResult();
-            };
-            timer.Start();
+            //var timer = new Timer(2000);
+            //timer.Elapsed += (s, e) =>
+            //{
+            //    Task.WhenAll(
+            //        apiProxy.UpdateMeterReadingAsync("meter1", random.Next(200, 300)),
+            //        apiProxy.UpdateMeterReadingAsync("meter2", random.Next(200, 300)),
+            //        apiProxy.UpdateMeterReadingAsync("meter3", random.Next(200, 300))
+            //        ).GetAwaiter().GetResult();
+            //};
+            //timer.Start();
 
             Console.ReadKey();
         }
