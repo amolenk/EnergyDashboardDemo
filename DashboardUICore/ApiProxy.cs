@@ -15,7 +15,7 @@ namespace DashboardUI
         public ApiProxy()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("http://localhost:9061/");
+            _client.BaseAddress = new Uri("http://localhost:8385/");
         }
 
         public async Task RegisterTopologyAsync()

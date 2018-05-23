@@ -11,14 +11,14 @@ using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace GatewayApi
+namespace GatewayApiCore
 {
     /// <summary>
     /// The FabricRuntime creates an instance of this class for each service type instance. 
     /// </summary>
-    internal sealed class GatewayApi : StatelessService
+    internal sealed class GatewayApiCore : StatelessService
     {
-        public GatewayApi(StatelessServiceContext context)
+        public GatewayApiCore(StatelessServiceContext context)
             : base(context)
         { }
 
@@ -31,17 +31,17 @@ namespace GatewayApi
             return new ServiceInstanceListener[]
             {
                 new ServiceInstanceListener(serviceContext =>
-                    new WebListenerCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
+                    new KestrelCommunicationListener(serviceContext, "ServiceEndpoint", (url, listener) =>
                     {
-                        ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting WebListener on {url}");
+                        ServiceEventSource.Current.ServiceMessage(serviceContext, $"Starting Kestrel on {url}");
 
-                        return new WebHostBuilder().UseWebListener()
+                        return new WebHostBuilder()
+                                    .UseKestrel()
                                     .ConfigureServices(
                                         services => services
                                             .AddSingleton<StatelessServiceContext>(serviceContext))
                                     .UseContentRoot(Directory.GetCurrentDirectory())
                                     .UseStartup<Startup>()
-                                    .UseApplicationInsights()
                                     .UseServiceFabricIntegration(listener, ServiceFabricIntegrationOptions.None)
                                     .UseUrls(url)
                                     .Build();

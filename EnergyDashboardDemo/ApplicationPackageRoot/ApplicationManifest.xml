@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="EnergyDashboardDemoType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
-    <Parameter Name="GatewayApi_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="GatewayApiCore_InstanceCount" DefaultValue="-1" />
     <Parameter Name="ChargePointActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="ChargePointActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ChargePointActorService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="ChargePointOperatorActorService_PartitionCount" DefaultValue="10" />
-    <Parameter Name="ChargePointOperatorActorService_MinReplicaSetSize" DefaultValue="1" />
-    <Parameter Name="ChargePointOperatorActorService_TargetReplicaSetSize" DefaultValue="1" />
+    <Parameter Name="ChargePointOperatorActorService_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="ChargePointOperatorActorService_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="DashboardActorService_PartitionCount" DefaultValue="10" />
     <Parameter Name="DashboardActorService_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="DashboardActorService_TargetReplicaSetSize" DefaultValue="3" />
@@ -19,10 +19,7 @@
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="MyAwesomeNewActorPkg" ServiceManifestVersion="1.0.0" />
-  </ServiceManifestImport>
-  <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="GatewayApiPkg" ServiceManifestVersion="1.0.0" />
+    <ServiceManifestRef ServiceManifestName="GatewayApiCorePkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
@@ -43,8 +40,8 @@
          ServiceFabric PowerShell module.
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
-    <Service Name="GatewayApi" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="GatewayApiType" InstanceCount="[GatewayApi_InstanceCount]">
+    <Service Name="GatewayApiCore" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="GatewayApiCoreType" InstanceCount="[GatewayApiCore_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
     </Service>
@@ -53,8 +50,8 @@
         <UniformInt64Partition PartitionCount="[ChargePointActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>
-    <Service Name="ChargePointOperatorActorService" GeneratedIdRef="7c5ad237-8c82-4576-baad-bf290d388a61|None">
-      <StatefulService ServiceTypeName="ChargePointOperatorUsingTimerActorServiceType" TargetReplicaSetSize="[ChargePointOperatorActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ChargePointOperatorActorService_MinReplicaSetSize]">
+    <Service Name="ChargePointOperatorActorService" GeneratedIdRef="81240b37-3f91-4d2e-8022-f8a7848b5dce|Persisted">
+      <StatefulService ServiceTypeName="ChargePointOperatorActorServiceType" TargetReplicaSetSize="[ChargePointOperatorActorService_TargetReplicaSetSize]" MinReplicaSetSize="[ChargePointOperatorActorService_MinReplicaSetSize]">
         <UniformInt64Partition PartitionCount="[ChargePointOperatorActorService_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
       </StatefulService>
     </Service>

@@ -10,12 +10,14 @@ namespace GatewayApi.Controllers
     [Route("api/[controller]")]
     public class ChargePointController : Controller
     {
-        // PUT api/meter/building
+        // PUT api/chargepoint/{id}
         [HttpPut("{id}")]
         public async Task Put(string id, [FromBody]ChargeRecord record)
         {
             ActorId actorId = new ActorId(id);
             IChargePointActor actorProxy = ActorProxy.Create<IChargePointActor>(actorId);
+
+            // service = ChargePointActorType
 
             switch (record.EventType)
             {

@@ -10,7 +10,7 @@
             <ReplicatorConfigSection Name="DashboardActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="DashboardActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="DashboardActorServiceLocalStoreConfig" />
-            <ServiceEndpoint Name="DashboardActorServiceEndpoint" />
+            <ServiceEndpointV2 Name="DashboardActorServiceEndpointV2" />
           </GeneratedNames>
         </Extension>
       </Extensions>
@@ -26,7 +26,7 @@
   <ConfigPackage Name="Config" Version="1.0.0" />
   <Resources>
     <Endpoints>
-      <Endpoint Name="DashboardActorServiceEndpoint" />
+      <Endpoint Name="DashboardActorServiceEndpointV2" />
       <Endpoint Name="DashboardActorServiceReplicatorEndpoint" />
     </Endpoints>
   </Resources>

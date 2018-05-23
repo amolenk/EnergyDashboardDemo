@@ -10,7 +10,7 @@
             <ReplicatorConfigSection Name="ChargePointActorServiceReplicatorConfig" />
             <ReplicatorSecurityConfigSection Name="ChargePointActorServiceReplicatorSecurityConfig" />
             <StoreConfigSection Name="ChargePointActorServiceLocalStoreConfig" />
-            <ServiceEndpoint Name="ChargePointActorServiceEndpoint" />
+            <ServiceEndpointV2 Name="ChargePointActorServiceEndpointV2" />
           </GeneratedNames>
         </Extension>
       </Extensions>
@@ -26,7 +26,7 @@
   <ConfigPackage Name="Config" Version="1.0.0" />
   <Resources>
     <Endpoints>
-      <Endpoint Name="ChargePointActorServiceEndpoint" />
+      <Endpoint Name="ChargePointActorServiceEndpointV2" />
       <Endpoint Name="ChargePointActorServiceReplicatorEndpoint" />
     </Endpoints>
   </Resources>

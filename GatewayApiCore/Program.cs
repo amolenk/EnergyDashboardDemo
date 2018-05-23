@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GatewayApi
+namespace GatewayApiCore
 {
     internal static class Program
     {
@@ -20,10 +20,10 @@ namespace GatewayApi
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
 
-                ServiceRuntime.RegisterServiceAsync("GatewayApiType",
-                    context => new GatewayApi(context)).GetAwaiter().GetResult();
+                ServiceRuntime.RegisterServiceAsync("GatewayApiCoreType",
+                    context => new GatewayApiCore(context)).GetAwaiter().GetResult();
 
-                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(GatewayApi).Name);
+                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(GatewayApiCore).Name);
 
                 // Prevents this host process from terminating so services keeps running. 
                 Thread.Sleep(Timeout.Infinite);

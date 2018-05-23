@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
-using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace DashboardUI
 {
@@ -20,10 +20,11 @@ namespace DashboardUI
             DrawDashboard();
             Write("CONNECTING...", 0, 0, ConsoleColor.Cyan, ConsoleColor.Red);
 
-            var hubConnection = new HubConnection("http://localhost:9061/");
-            IHubProxy dashboardHubProxy = hubConnection.CreateHubProxy("DashboardHub");
+            var hubConnection = new HubConnectionBuilder()
+                .WithUrl("http://localhost:8385/dashboard")
+                .Build();
 
-            dashboardHubProxy.On<DashboardStatus>("message", status =>
+            hubConnection.On<DashboardStatus>("message", status =>
             {
                 foreach (var chargePoint in status.ChargePoints)
                 {
@@ -35,27 +36,30 @@ namespace DashboardUI
                 DrawMeterReading(70, 25, status.ChargeEnergy);
             });
 
-            await hubConnection.Start();
+            await hubConnection.StartAsync();
 
             Write("RUNNING!     ", 0, 0, ConsoleColor.Cyan, ConsoleColor.Black);
 
             var apiProxy = new ApiProxy();
             await apiProxy.RegisterTopologyAsync();
 
-            //var simulationTasks = Enumerable.Range(1, 10)
-            //    .Select(i => SimulateChargePointUsage(i, "chargePoint" + i, apiProxy))
-            //    .ToList();
+            Console.ReadKey();
+            Write("SIMULATING!  ", 0, 0, ConsoleColor.Cyan, ConsoleColor.Black);
 
-            //var timer = new Timer(2000);
-            //timer.Elapsed += (s, e) =>
-            //{
-            //    Task.WhenAll(
-            //        apiProxy.UpdateMeterReadingAsync("meter1", random.Next(200, 300)),
-            //        apiProxy.UpdateMeterReadingAsync("meter2", random.Next(200, 300)),
-            //        apiProxy.UpdateMeterReadingAsync("meter3", random.Next(200, 300))
-            //        ).GetAwaiter().GetResult();
-            //};
-            //timer.Start();
+            var simulationTasks = Enumerable.Range(1, 10)
+                .Select(i => SimulateChargePointUsage(i, "chargePoint" + i, apiProxy))
+                .ToList();
+
+            var timer = new Timer(2000);
+            timer.Elapsed += (s, e) =>
+            {
+                Task.WhenAll(
+                    apiProxy.UpdateMeterReadingAsync("meter1", random.Next(200, 300)),
+                    apiProxy.UpdateMeterReadingAsync("meter2", random.Next(200, 300)),
+                    apiProxy.UpdateMeterReadingAsync("meter3", random.Next(200, 300))
+                    ).GetAwaiter().GetResult();
+            };
+            timer.Start();
 
             Console.ReadKey();
         }
